@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F4E80">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DMD">
 <title>DMD — Turismo Tausa</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -231,6 +239,58 @@
 
   /* ---------- pie de página: contacto ---------- */
   /* estilos del pie de página (.site-footer, .footer-inner, etc.) ahora viven en site.css, compartidos por todas las páginas */
+
+  /* ---------- selector de categorías (Tausa / Hoteles / Restaurantes / Mapa) ---------- */
+  .category-selector{
+    max-width:1000px;
+    margin:28px auto 0 auto;
+    padding:0 20px;
+    display:grid;
+    grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:12px;
+  }
+  .cat-btn{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:8px;
+    background:#F8FAFC;
+    border:1.5px solid #E4E9EF;
+    border-radius:12px;
+    padding:16px 14px;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size:13.5px;
+    letter-spacing:0.5px;
+    color:#12202E;
+    text-decoration:none;
+    cursor:pointer;
+    transition:border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+  .cat-btn:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .cat-btn.active{ background:linear-gradient(135deg, #2C6CA6, #1F4E80); border-color:#1F4E80; color:#fff; }
+  .cat-btn .cat-icon{ font-size:16px; }
+
+  /* ---------- paneles que abren los botones de categoría ---------- */
+  .category-panel{ display:none; max-width:1000px; margin:0 auto; padding:0 20px; }
+  .category-panel.open{ display:block; }
+
+  .tausa-intro{ max-width:720px; margin:36px auto 0 auto; text-align:center; }
+  .tausa-intro h2{ margin:0 0 12px 0; font-size:24px; font-weight:800; color:#12202E; }
+  .tausa-intro p{ margin:0 0 14px 0; font-size:14.5px; line-height:1.75; color:#4A5A6A; text-align:left; }
+  .tausa-kicker{ font-size:11.5px; text-transform:uppercase; letter-spacing:1px; color:#00967F; font-weight:700; margin:36px 0 8px 0; }
+  .tausa-sub{ text-align:center; max-width:640px; margin:0 auto 6px auto; font-size:13.5px; color:#69788A; }
+
+  .tausa-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:14px; margin:14px 0 10px 0; }
+  .tausa-card{ background:#fff; border:1px solid #E4E9EF; border-radius:12px; padding:18px; text-align:left; transition:border-color 0.15s ease, transform 0.15s ease; }
+  .tausa-card:hover{ border-color:var(--accent); transform:translateY(-2px); }
+  .tausa-card h4{ font-size:13.5px; font-weight:700; color:#12202E; margin:0 0 6px 0; }
+  .tausa-card p{ font-size:12.5px; color:#69788A; line-height:1.6; margin:0; }
+
+  .placeholder-panel{ text-align:center; padding:60px 20px; }
+  .placeholder-panel .emoji{ font-size:40px; margin-bottom:14px; }
+  .placeholder-panel h3{ font-size:20px; font-weight:800; color:#12202E; margin:0 0 10px 0; }
+  .placeholder-panel p{ font-size:14px; color:#69788A; max-width:420px; margin:0 auto; line-height:1.7; }
 </style>
 </head>
 <body>
@@ -264,17 +324,62 @@
 <div class="content-wrap">
 <div class="welcome-block">
   <h2>Bienvenido a Tausa</h2>
-  <p>Un lugar donde la historia, la naturaleza y la cultura se encuentran entre las montañas. Descubre sus paisajes, conoce sus historias y encuentra nuevas experiencias en cada rincón.</p>
+  <p>Un lugar donde la historia, la naturaleza y la cultura se encuentran entre las montañas. Elige qué quieres descubrir primero.</p>
 </div>
-<div class="section-title">Descubre nuestros lugares</div>
-<div class="home-grid">
-  <a class="place-card map-card" href="mapa.html">
-    <span class="icon">🗺️</span>
-    <span class="name">Mapa GPS — ver todos los lugares y trazar ruta</span>
-    <span class="arrow">→</span>
-  </a>
 
-  <div id="placeCardsWrap" style="display:contents;"></div>
+<div class="category-selector">
+  <button type="button" class="cat-btn" data-cat="tausa"><span class="cat-icon">🏔️</span> TAUSA</button>
+  <button type="button" class="cat-btn" data-cat="hoteles"><span class="cat-icon">🛏️</span> HOTELES</button>
+  <button type="button" class="cat-btn" data-cat="restaurantes"><span class="cat-icon">🍽️</span> RESTAURANTES</button>
+  <a class="cat-btn" href="mapa.html"><span class="cat-icon">🗺️</span> MAPA</a>
+</div>
+
+<div class="category-panel" id="panel-tausa">
+  <div class="tausa-intro">
+    <h2>Hay que conocer Tausa</h2>
+    <p>Tausa se encuentra en Cundinamarca, en una zona de montaña de la Cordillera Oriental. Su territorio estuvo habitado por comunidades muiscas, para quienes la producción de sal tuvo una importancia enorme: no era solo para cocinar, sino un recurso valioso que se intercambiaba con otras comunidades y las conectaba con redes comerciales más amplias.</p>
+    <p><strong>El nombre Tausa</strong> suele interpretarse desde la lengua muisca como "tributo en la cumbre" — una lectura que conecta territorio, altura y cultura.</p>
+    <p>Durante la Colonia, sus habitantes fueron trasladados a Nemocón (1777) y luego reubicados en lo que hoy es Tausa Viejo (1781). En 1942 el pueblo se trasladó una vez más, a donde hoy está la cabecera municipal, dejando atrás vestigios como el Templo Doctrinero.</p>
+  </div>
+
+  <div class="tausa-kicker" style="text-align:center;">Historia vs. leyenda</div>
+  <p class="tausa-sub">En DMD creemos que las dos merecen ser escuchadas, pero no deben confundirse.</p>
+  <div class="tausa-grid">
+    <div class="tausa-card"><h4>📚 Historia documentada</h4><p>Información respaldada por documentos históricos, investigaciones o fuentes institucionales.</p></div>
+    <div class="tausa-card"><h4>🗣️ Memoria y tradición oral</h4><p>Relatos transmitidos entre generaciones. Una leyenda no necesita ser comprobada para formar parte de la cultura de un lugar.</p></div>
+    <div class="tausa-card"><h4>🔎 Por confirmar</h4><p>Información interesante que requiere investigación adicional antes de clasificarse en una de las dos categorías anteriores.</p></div>
+  </div>
+
+  <div class="tausa-kicker">Viajar también es cuidar</div>
+  <div class="tausa-grid">
+    <div class="tausa-card"><h4>No dejes basura</h4><p>Lo que llevas contigo también debe regresar contigo.</p></div>
+    <div class="tausa-card"><h4>Respeta la fauna</h4><p>No persigas animales ni alteres sus espacios.</p></div>
+    <div class="tausa-card"><h4>No extraigas plantas</h4><p>Especialmente en ecosistemas de alta montaña.</p></div>
+    <div class="tausa-card"><h4>Cuida el patrimonio</h4><p>No rayes, golpees ni alteres estructuras históricas.</p></div>
+    <div class="tausa-card"><h4>Respeta los caminos</h4><p>Utiliza las rutas autorizadas.</p></div>
+    <div class="tausa-card"><h4>Respeta a los habitantes</h4><p>Muchos destinos hacen parte del territorio cotidiano de comunidades locales.</p></div>
+  </div>
+
+  <div class="section-title">Descubre nuestros lugares</div>
+  <div class="home-grid" style="margin-top:16px;">
+    <div id="placeCardsWrap" style="display:contents;"></div>
+  </div>
+</div>
+
+<div class="category-panel" id="panel-hoteles">
+  <div class="placeholder-panel">
+    <div class="emoji">🛏️</div>
+    <h3>Hospedaje — próximamente</h3>
+    <p>DMD se está expandiendo para mostrarte también dónde quedarte en Tausa. Muy pronto vas a encontrar aquí los hoteles y hospedajes del municipio, con fotos, ubicación y reseñas — igual que ya puedes ver con los lugares turísticos.</p>
+  </div>
+</div>
+
+<div class="category-panel" id="panel-restaurantes">
+  <div class="placeholder-panel">
+    <div class="emoji">🍽️</div>
+    <h3>Restaurantes — próximamente</h3>
+    <p>Muy pronto vas a poder descubrir aquí los restaurantes de Tausa: qué comer, dónde, y qué opinan quienes ya los visitaron.</p>
+  </div>
 </div>
 </div>
 
@@ -318,6 +423,27 @@
 <script src="site-data.js"></script>
 <script src="topsearch.js"></script>
 <script>
+  // ---------- selector de categorías: Tausa / Hoteles / Restaurantes ----------
+  // (Mapa es un link directo a mapa.html, no abre panel)
+  (function(){
+    const catButtons = Array.prototype.slice.call(document.querySelectorAll('.cat-btn[data-cat]'));
+    const panels = Array.prototype.slice.call(document.querySelectorAll('.category-panel'));
+    catButtons.forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const cat = btn.getAttribute('data-cat');
+        const panel = document.getElementById('panel-' + cat);
+        const wasOpen = panel.classList.contains('open');
+        panels.forEach(function(p){ p.classList.remove('open'); });
+        catButtons.forEach(function(b){ b.classList.remove('active'); });
+        if(!wasOpen){
+          panel.classList.add('open');
+          btn.classList.add('active');
+          panel.scrollIntoView({ behavior:'smooth', block:'start' });
+        }
+      });
+    });
+  })();
+
   const wrap = document.getElementById('placeCardsWrap');
   PLACES.forEach(function(place){
     const a = document.createElement('a');
@@ -451,5 +577,12 @@
   </div>
 </div>
 <script src="assistant.js"></script>
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('service-worker.js').catch(function(){});
+    });
+  }
+</script>
 </body>
 </html>
