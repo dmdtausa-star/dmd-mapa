@@ -366,12 +366,13 @@
   </div>
 </div>
 
+
 <div class="category-panel" id="panel-hoteles">
-  <div class="placeholder-panel">
-    <div class="emoji">🛏️</div>
-    <h3>Hospedaje — próximamente</h3>
-    <p>DMD se está expandiendo para mostrarte también dónde quedarte en Tausa. Muy pronto vas a encontrar aquí los hoteles y hospedajes del municipio, con fotos, ubicación y reseñas — igual que ya puedes ver con los lugares turísticos.</p>
+  <div class="section-title">Dónde hospedarte</div>
+  <div class="home-grid" style="margin-top:16px;">
+    <div id="hotelCardsWrap" style="display:contents;"></div>
   </div>
+  <p class="tausa-sub" style="margin:6px auto 30px auto;">Muy pronto más hoteles y hospedajes de Tausa en DMD.</p>
 </div>
 
 <div class="category-panel" id="panel-restaurantes">
@@ -443,6 +444,21 @@
       });
     });
   })();
+
+  // ---------- tarjetas de hoteles (se generan desde HOTELS en site-data.js) ----------
+  const hotelWrap = document.getElementById('hotelCardsWrap');
+  HOTELS.forEach(function(h){
+    const a = document.createElement('a');
+    a.className = 'place-card';
+    a.href = 'hotel.html?h=' + h.slug;
+    a.innerHTML =
+      '<span class="icon"></span>' +
+      '<span class="text">' +
+        '<span class="name">' + h.name + '</span>' +
+        '<span class="desc">' + (h.entorno || '') + '</span>' +
+      '</span>';
+    hotelWrap.appendChild(a);
+  });
 
   const wrap = document.getElementById('placeCardsWrap');
   PLACES.forEach(function(place){

@@ -236,6 +236,90 @@ function getPlaceBySlug(slug){
   return PLACES.find(function(p){ return p.slug === slug; });
 }
 
+// ---------- HOTELES ----------
+// Mismo sistema que PLACES, pero para hospedaje. hotel.html lee uno de estos
+// con el parámetro ?h=<slug>, igual que lugar.html lee PLACES con ?p=<slug>.
+//
+// Campos de cada hotel:
+//   name, categoria, ubicacion, entorno, comoLlegar  Datos generales y de ubicación
+//   descripcion                                       Texto de introducción
+//   photos   Lista de rutas a imágenes (opcional, [] si todavía no hay —
+//            mientras esté vacío, la página muestra espacios reservados
+//            listos para cuando subas las fotos reales)
+//   habitaciones        Lista de tipos de habitación: { nombre, capacidad, nota }
+//   amenidadesHabitacion Lista de comodidades incluidas en las habitaciones
+//   experiencias         Lista de actividades que ofrece
+//   restaurante           { descripcion, ingredientes[], platos[], horario }
+//   eventos                { descripcion, espacios:[{nombre,capacidad}], alojamiento }
+//   sostenibilidad         Lista de prácticas / cifras de sostenibilidad
+//   embalse                Texto sobre el entorno natural (cuando aplica)
+//   petFriendly            { reglas[], sancion }
+//   infoUtil               { checkin, checkout, wifi, parqueadero, mascotas, altitud }
+//   enlaces                { reservar, web, whatsapp, telefono }  (vacío '' si no hay)
+const HOTELS = [
+  {
+    name: 'Fuga Hotel — Embalse del Neusa',
+    categoria: 'Hospedaje · Hotel · Experiencia turística',
+    ubicacion: 'Finca La Victoria, Vereda Llano Grande, Tausa, Cundinamarca.',
+    entorno: 'Embalse del Neusa, aproximadamente a 3.000 msnm.',
+    comoLlegar: 'Desde Bogotá: 54 km desde el peaje del norte. Desde el embarcadero del Parque del Neusa son aproximadamente 6,5 km por la carretera hacia Tausa. Fuga recomienda buscar "Fuga Neusa" en Google Maps o Waze.',
+    descripcion: 'Fuga es un Cabin Retreat ubicado frente al Embalse del Neusa. Su propuesta está enfocada en descansar, desconectarse y reconectar con la naturaleza, rodeado de bosque altoandino, frailejones, montaña y niebla. Cuenta con 9 habitaciones y espacios diseñados para disfrutar del paisaje y la tranquilidad.',
+    mapsQuery: 'Fuga Neusa',
+    photos: [],
+    photoSlotsLabels: ['Exterior / cabañas', 'Habitaciones', 'Restaurante', 'Experiencias', 'Eventos', 'Vista al embalse'],
+    habitaciones: [
+      { nombre: 'Standard', capacidad: 'Hasta 3 personas', nota: '' },
+      { nombre: 'Petit Suite', capacidad: 'Hasta 2 personas', nota: 'Con jacuzzi privado' },
+      { nombre: 'Suite', capacidad: 'Hasta 5 personas', nota: 'Con jacuzzi privado' }
+    ],
+    habitacionesNota: 'Fuga cuenta con 9 habitaciones en total: 4 Standard, 1 Petit Suite y 4 Suite. Las Suite y Petit Suite tienen jacuzzi privado en la terraza.',
+    amenidadesHabitacion: ['Cama king o configuración según habitación', 'Calefactor', 'Ducha de agua caliente', 'Estación de café', 'Nevera minibar', 'Wi-Fi de alta velocidad', 'Terraza privada', 'Fogata privada', 'Malla de catamarán', 'Vista de 180° al embalse', 'Almohadas duras y blandas', 'Amenities biodegradables'],
+    experiencias: ['Senderos ecológicos entre bosque nativo y frailejones de más de 80 años', 'Fogatas privadas y comunales', 'Jacuzzis privados', 'Masajes bajo reserva', 'Paseos en bicicleta alrededor del embalse', 'Caminatas', 'Juegos de mesa', 'Kayak', 'Paddle board', 'Botes de remo', 'Paseos en lancha', 'Pesca deportiva', 'Siembra de árboles', 'Yoga', 'Actividades personalizadas'],
+    experienciasNota: 'Las actividades náuticas se coordinan mediante operadores aliados del Embalse del Neusa.',
+    restaurante: {
+      descripcion: 'El restaurante de Fuga ofrece una cocina de inspiración latinoamericana utilizando productos regionales y de su propia huerta.',
+      ingredientes: ['Papas nativas', 'Queso Paipa', 'Maíz', 'Hierbas y flores comestibles', 'Verduras de la huerta', 'Ajíes y especias', 'Frutas de temporada', 'Lechugas y hojas verdes'],
+      platos: ['Empanadas paisas con gravy de asado de tira', 'Criollas bravas', 'Papas chorreadas', 'Tacos de trucha', 'Tostada de tira', 'Asado de tira', 'Pollo y esquites', 'Pepper Steak', 'Fuga Burger', 'Arroz al sartén', 'Torta de chocolate', 'Cheesecake de temporada', 'Gofres de pandeyuca con miel del Neusa'],
+      horario: 'Restaurante: todos los días de 8:00 a. m. a 9:00 p. m. · Bar: hasta las 11:00 p. m.'
+    },
+    eventos: {
+      descripcion: 'Fuga también funciona para eventos corporativos, reuniones de trabajo, celebraciones sociales, matrimonios, cumpleaños, aniversarios, pedidas de mano, despedidas, revelaciones de género, y retiros y actividades de bienestar.',
+      espacios: [
+        { nombre: 'Invernadero', capacidad: '15 personas' },
+        { nombre: 'Salón de reuniones', capacidad: '60 personas' },
+        { nombre: 'Restaurante', capacidad: '80 personas' },
+        { nombre: 'Plataforma de eventos', capacidad: '150 personas' }
+      ],
+      alojamiento: 'Para eventos con alojamiento, las 9 habitaciones permiten alojar hasta 30 personas en camas individuales.'
+    },
+    sostenibilidad: ['2 hectáreas propias', 'Más de 3.000 plantas sembradas', 'Más de 30 especies de aves registradas', 'Frailejones de más de 80 años', 'Bosque nativo altoandino', 'Huerta propia', 'Productos de proveedores locales', 'Jabones y shampoos biodegradables', 'Compostaje', 'Iluminación LED', 'Sistemas de manejo del agua', 'Reconocimiento como Negocio Verde de la CAR'],
+    embalse: 'El Embalse del Neusa se encuentra aproximadamente a 3.000 msnm y comprende unas 900 hectáreas de agua dentro de un parque natural de aproximadamente 3.700 hectáreas. Fuga indica que el embalse está aproximadamente a 10 minutos caminando desde sus instalaciones.',
+    petFriendly: {
+      reglas: ['Máximo 2 mascotas por habitación', 'No tiene costo adicional por hospedarlas', 'Deben permanecer supervisadas', 'En zonas techadas deben estar con correa o en guacal', 'En jardines pueden circular sin correa bajo supervisión', 'No pueden subir a camas, sofás o muebles', 'El propietario debe recoger los excrementos', 'Se debe informar que se viaja con mascota al realizar la reserva', 'Se solicita certificado de vacunación vigente'],
+      sancion: 'La política establece sanciones de $120.000 COP para determinados incumplimientos.'
+    },
+    infoUtil: {
+      checkin: '3:00 p. m.',
+      checkout: '12:00 p. m.',
+      wifi: 'Starlink de 500 Mb',
+      parqueadero: 'Privado y sin costo para huéspedes',
+      mascotas: 'Sí (ver política Pet Friendly)',
+      altitud: 'Aproximadamente 3.000 msnm'
+    },
+    enlaces: {
+      reservar: '',
+      web: '',
+      whatsapp: '',
+      telefono: ''
+    }
+  }
+];
+
+function getHotelBySlug(slug){
+  return HOTELS.find(function(h){ return h.slug === slug; });
+}
+HOTELS.forEach(function(h){ h.slug = slugify(h.name); });
+
 // ---------- CONTACTOS DE AYUDA (se muestran en la ficha de cada lugar) ----------
 // Datos oficiales de la Alcaldía — reemplaza si cambian.
 const MUNICIPIO_CONTACTO = {
