@@ -3,6 +3,14 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1F4E80">
+<link rel="icon" href="icons/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="icons/favicon-16.png" sizes="16x16" type="image/png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="DMD">
 <title>Mapa GPS — DMD</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -77,6 +85,19 @@
   #placesList li a{ font-size:10.5px; color:var(--fg-dim); text-decoration:none; white-space:nowrap; border:1px solid var(--line); border-radius:6px; padding:3px 6px; }
   #placesList li a:hover{ color:var(--accent); border-color:var(--accent); }
 
+  /* hoteles: mismo panel que los lugares, con el color ámbar de la marca */
+  #hotelsSection{ padding:16px 20px 4px 20px; border-bottom:1px solid var(--line); }
+  #hotelsSection .sectionTitle{ font-size:11px; text-transform:uppercase; letter-spacing:1px; color:var(--fg-dim); margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+  #hotelsSection .sectionTitle .sw{ width:8px;height:8px;border-radius:50%; background:var(--accent-2); }
+  #hotelsList{ list-style:none; margin:0 0 12px 0; padding:0; max-height:190px; overflow-y:auto; }
+  #hotelsList li{ padding:9px 11px; border:1px solid var(--line); border-radius:8px; margin-bottom:6px; cursor:pointer; background:var(--panel-2); display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  #hotelsList li:hover{ border-color:var(--accent-2); }
+  #hotelsList li .left{ display:flex; align-items:center; gap:8px; min-width:0; }
+  #hotelsList li .sw{ width:6px;height:6px;border-radius:50%; background:var(--accent-2); flex:0 0 auto; }
+  #hotelsList li .name{ font-size:12.5px; color:var(--fg); font-weight:500; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  #hotelsList li a{ font-size:10.5px; color:var(--fg-dim); text-decoration:none; white-space:nowrap; border:1px solid var(--line); border-radius:6px; padding:3px 6px; }
+  #hotelsList li a:hover{ color:var(--accent); border-color:var(--accent); }
+
   #searchWrap{ padding:16px 20px 8px 20px; }
   #searchForm{ display:flex; gap:8px; }
   #searchInput{
@@ -117,6 +138,7 @@
   .leaflet-container{ background:var(--paper); }
   .live-marker{ width:18px;height:18px;border-radius:50%; background:var(--live); border:3px solid #fff; box-shadow:0 0 0 4px rgba(62,139,255,0.25), 0 2px 6px rgba(0,0,0,0.35); }
   .dest-marker{ width:14px;height:14px;border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:var(--accent-2); border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.4); }
+  .hotel-marker{ width:16px;height:16px;border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:var(--accent-2); border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.4); }
   .place-marker{ width:16px;height:16px;border-radius:50% 50% 50% 0; transform:rotate(-45deg); background:var(--place); border:2px solid #fff; box-shadow:0 2px 6px rgba(0,0,0,0.4); }
   .place-popup .leaflet-popup-content-wrapper{ background:var(--panel); color:var(--fg); border:1px solid var(--line); border-radius:10px; }
   .place-popup .leaflet-popup-tip{ background:var(--panel); }
@@ -243,6 +265,11 @@
       <div id="placesSection">
         <div class="sectionTitle"><span class="sw"></span>Nuestros lugares</div>
         <ul id="placesList"></ul>
+      </div>
+
+      <div id="hotelsSection" style="display:none;">
+        <div class="sectionTitle"><span class="sw"></span>Hoteles</div>
+        <ul id="hotelsList"></ul>
       </div>
 
       <div id="searchWrap">
@@ -396,11 +423,13 @@
   const liveIcon = L.divIcon({ className:'', html:'<div class="live-marker"></div>', iconSize:[18,18], iconAnchor:[9,9] });
   const liveIconManual = L.divIcon({ className:'', html:'<div class="live-marker manual"></div>', iconSize:[18,18], iconAnchor:[9,9] });
   const destIcon = L.divIcon({ className:'', html:'<div class="dest-marker"></div>', iconSize:[14,14], iconAnchor:[7,12] });
+  const hotelIcon = L.divIcon({ className:'', html:'<div class="hotel-marker"></div>', iconSize:[16,16], iconAnchor:[8,14] });
   const placeIcon = L.divIcon({ className:'', html:'<div class="place-marker"></div>', iconSize:[16,16], iconAnchor:[8,14] });
 
   const statusEl = document.getElementById('status');
   const resultsEl = document.getElementById('results');
   const placesListEl = document.getElementById('placesList');
+  const hotelsListEl = document.getElementById('hotelsList');
   const coordsEl = document.getElementById('myCoords');
   const hintEl = document.getElementById('hint');
   const routeCard = document.getElementById('routeCard');
@@ -464,6 +493,53 @@
     });
     placesListEl.appendChild(li);
   });
+
+  // ---------- hoteles con coordenadas (los que no las tienen todavía no aparecen en el mapa) ----------
+  const mappedHotels = HOTELS.filter(function(h){ return typeof h.lat === 'number' && typeof h.lng === 'number'; });
+  const hotelMarkers = [];
+  mappedHotels.forEach(function(hotel){
+    const marker = L.marker([hotel.lat, hotel.lng], { icon: hotelIcon }).addTo(map);
+    const popupHtml =
+      (hotel.photos && hotel.photos.length ? '<img class="p-photo" src="' + hotel.photos[0] + '" alt="' + hotel.name + '">' : '') +
+      '<div class="p-name">🛏️ ' + hotel.name + '</div>' +
+      '<div class="map-rating" id="mapRatingH-' + hotel.slug + '">' +
+        '<span class="map-rating-loading">Cargando calificación…</span>' +
+      '</div>' +
+      ((hotel.desc || hotel.entorno) ? '<div class="p-desc">' + (hotel.desc || hotel.entorno) + '</div>' : '') +
+      '<div class="p-actions">' +
+        '<a class="secondary" href="hotel.html?h=' + hotel.slug + '">Ver ficha</a>' +
+        '<button onclick="window.__goToHotelSlug(\'' + hotel.slug + '\')">Cómo llegar</button>' +
+      '</div>';
+    marker.bindPopup(popupHtml, { className:'place-popup', minWidth: 200 });
+    marker.on('popupopen', function(){
+      const ratingEl = document.getElementById('mapRatingH-' + hotel.slug);
+      if(ratingEl && window.getReviewsSummaryHtml){
+        // las reseñas de hoteles se guardan con la clave "hotel-<slug>" para no mezclarse con los lugares
+        window.getReviewsSummaryHtml('hotel-' + hotel.slug).then(function(html){ ratingEl.innerHTML = html; });
+      }
+    });
+    hotelMarkers.push(marker);
+
+    const li = document.createElement('li');
+    li.style.cursor = 'pointer';
+    li.innerHTML =
+      '<span class="left"><span class="sw"></span><span class="name">' + hotel.name + '</span></span>' +
+      '<a href="hotel.html?h=' + hotel.slug + '">ficha</a>';
+    li.addEventListener('click', function(e){
+      if(e.target.closest('a')) return;
+      window.__goToHotelSlug(hotel.slug);
+    });
+    hotelsListEl.appendChild(li);
+  });
+  if(mappedHotels.length){ document.getElementById('hotelsSection').style.display = 'block'; }
+
+  window.__goToHotelSlug = function(slug){
+    const hotel = mappedHotels.find(function(h){ return h.slug === slug; });
+    if(!hotel) return;
+    const marker = hotelMarkers[mappedHotels.indexOf(hotel)];
+    selectDestination(hotel.lat, hotel.lng, hotel.name, marker, slug, 'hotel');
+    map.closePopup();
+  };
 
   window.__goToPlaceSlug = function(slug){
     const place = getPlaceBySlug(slug);
@@ -622,7 +698,7 @@
     selectDestination(e.latlng.lat, e.latlng.lng, 'Punto seleccionado en el mapa');
   });
 
-  function selectDestination(lat, lng, name, existingMarker, slug){
+  function selectDestination(lat, lng, name, existingMarker, slug, kind){
     if(destMarker && destMarkerOwned){ map.removeLayer(destMarker); }
     if(existingMarker){ destMarker = existingMarker; destMarkerOwned = false; }
     else { destMarker = L.marker([lat, lng], { icon: destIcon }).addTo(map); destMarkerOwned = true; }
@@ -635,7 +711,7 @@
     routeCard.style.display = 'block';
     if(currentDestSlug){
       viewFichaLink.style.display = 'block';
-      viewFichaLink.href = 'lugar.html?p=' + currentDestSlug;
+      viewFichaLink.href = (kind === 'hotel' ? 'hotel.html?h=' : 'lugar.html?p=') + currentDestSlug;
     } else {
       viewFichaLink.style.display = 'none';
     }
@@ -704,9 +780,14 @@
 
   // si el link trae "?p=<slug>", seleccionamos ese lugar automáticamente
   (function openSharedPlaceFromUrl(){
-    const slug = new URLSearchParams(window.location.search).get('p');
+    const qs = new URLSearchParams(window.location.search);
+    const slug = qs.get('p');
     if(slug && getPlaceBySlug(slug)){
       setTimeout(function(){ window.__goToPlaceSlug(slug); }, 400);
+    }
+    const hslug = qs.get('h');
+    if(hslug){
+      setTimeout(function(){ window.__goToHotelSlug(hslug); }, 400);
     }
   })();
 })();
@@ -727,5 +808,12 @@
   </div>
 </div>
 <script src="assistant.js"></script>
+<script>
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('service-worker.js').catch(function(){});
+    });
+  }
+</script>
 </body>
 </html>

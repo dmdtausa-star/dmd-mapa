@@ -272,6 +272,7 @@ const HOTELS = [
       { nombre: 'Petit Suite', capacidad: 'Hasta 2 personas', nota: 'Con jacuzzi privado' },
       { nombre: 'Suite', capacidad: 'Hasta 5 personas', nota: 'Con jacuzzi privado' }
     ],
+    precioNota: '💡 Los precios cambian según tipo de habitación, cantidad de huéspedes, día, temporada y descuentos, por eso no los mostramos aquí. Consúltalos directamente con Fuga con el botón «Ver precios y reservar».',
     habitacionesNota: 'Fuga cuenta con 9 habitaciones en total: 4 Standard, 1 Petit Suite y 4 Suite. Las Suite y Petit Suite tienen jacuzzi privado en la terraza.',
     amenidadesHabitacion: ['Cama king o configuración según habitación', 'Calefactor', 'Ducha de agua caliente', 'Estación de café', 'Nevera minibar', 'Wi-Fi de alta velocidad', 'Terraza privada', 'Fogata privada', 'Malla de catamarán', 'Vista de 180° al embalse', 'Almohadas duras y blandas', 'Amenities biodegradables'],
     experiencias: ['Senderos ecológicos entre bosque nativo y frailejones de más de 80 años', 'Fogatas privadas y comunales', 'Jacuzzis privados', 'Masajes bajo reserva', 'Paseos en bicicleta alrededor del embalse', 'Caminatas', 'Juegos de mesa', 'Kayak', 'Paddle board', 'Botes de remo', 'Paseos en lancha', 'Pesca deportiva', 'Siembra de árboles', 'Yoga', 'Actividades personalizadas'],
@@ -311,6 +312,107 @@ const HOTELS = [
       web: '',
       whatsapp: '',
       telefono: ''
+    }
+  },
+  {
+    name: 'Neusa Hills Hotel Boutique',
+    categoria: 'Ecolodge · Hotel boutique',
+    ubicacion: 'Vereda Parama Bajo, Finca Neusa Hills Park, Tausa, Cundinamarca, Colombia.',
+    entorno: 'Finca Neusa Hills Park — naturaleza, huerta y vistas al embalse.',
+    desc: 'Ecolodge y hotel boutique con cabañas, restaurante y experiencias en Tausa.',
+    lat: 5.1445455, lng: -73.9502572,
+    descripcion: 'Neusa Hills Hotel Boutique es un establecimiento de alojamiento turístico que ofrece espacios privados para descansar, disfrutar de la naturaleza, compartir experiencias gastronómicas y organizar encuentros empresariales. Su propuesta integra alojamiento en cabañas y habitaciones, restaurante, actividades recreativas y creativas, experiencias para parejas y espacios destinados a eventos.',
+    photos: [],
+    photoSlotsLabels: ['Cabañas', 'Habitaciones', 'Restaurante Tributo', 'Experiencias', 'Eventos', 'Deck y embalse'],
+    habitaciones: [
+      { nombre: 'Adamá', tipo: 'Cabaña privada', descripcion: 'Cama Queen, baño con agua caliente, balcón, malla de catamarán y tina.', nota: 'Tina' },
+      { nombre: 'Vento', tipo: 'Cabaña privada dúplex', descripcion: 'Cama Queen, sofá cama, balcón, terraza, malla de catamarán y jacuzzi.', nota: 'Jacuzzi' },
+      { nombre: 'Oasis', tipo: 'Cabaña privada', descripcion: 'Cama Queen, baño privado, balcón, malla de catamarán y jacuzzi.', nota: 'Jacuzzi' },
+      { nombre: 'Suká', tipo: 'Habitación privada', descripcion: 'Cama doble, sofá cama y balcón.' },
+      { nombre: 'Bruma', tipo: 'Cabaña privada', descripcion: 'Cama doble, baño privado, balcón y malla de catamarán.' },
+      { nombre: 'Bosco', tipo: 'Cabaña privada', descripcion: 'Cama doble, baño privado y balcón.' },
+      { nombre: 'Nube', tipo: 'Habitación privada · tercer piso de Casa Madre', descripcion: 'Cama King, televisión, balcón y chimenea.' },
+      { nombre: 'Cielo', tipo: 'Habitación privada · tercer piso de Casa Madre', descripcion: 'Cama Queen, televisión, balcón y chimenea.' },
+      { nombre: 'Quiche', tipo: 'Cabaña privada', descripcion: 'Cama doble, baño privado y balcón.' }
+    ],
+    habitacionesNota: 'Según el catálogo, el alojamiento incluye desayuno, bebida caliente de bienvenida y acceso a zonas sociales. Las condiciones pueden variar según la habitación y la tarifa contratada.',
+    tarifas: {
+      titulo: 'Tarifas de alojamiento publicadas en el catálogo',
+      columna: 'Tarifa publicada en el catálogo',
+      items: [
+        { habitacion: 'Vento', valor: '$1.290.000' },
+        { habitacion: 'Oasis', valor: '$990.000' },
+        { habitacion: 'Adamá', valor: '$900.000' },
+        { habitacion: 'Suká', valor: '$890.000' },
+        { habitacion: 'Bruma', valor: '$840.000' },
+        { habitacion: 'Bosco', valor: '$720.000' },
+        { habitacion: 'Nube', valor: '$700.000' },
+        { habitacion: 'Cielo', valor: '$690.000' },
+        { habitacion: 'Quiche', valor: '$680.000' }
+      ],
+      aviso: 'Estos valores fueron transcritos del catálogo del establecimiento y no son tarifas confirmadas para hoy. Antes de reservar, confirma directamente con el hotel la vigencia, las fechas, la ocupación, los impuestos y las condiciones.'
+    },
+    experienciasGrupos: [
+      { titulo: 'Experiencias gastronómicas', items: ['Taller de pizza', 'Taller de sushi', 'Preparación de lomo al trapo', 'Experiencia de coctelería', 'Taller de amasijos y envueltos'] },
+      { titulo: 'Experiencias creativas', items: ['Taller de cerámica', 'Taller de pintura', 'Actividad de pintura y siembra de materas'] },
+      { titulo: 'Naturaleza y bienestar', items: ['Caminata al embalse', 'Caminata a la huerta', 'Cabalgata', 'Inmersión en hielo'] },
+      { titulo: 'Experiencias para parejas', items: ['Cena romántica', 'The Pleasure Kit', 'Bed Picnic como complemento del alojamiento'] }
+    ],
+    experienciasNota: 'Los precios, las fechas disponibles, los requisitos de participación y las condiciones de cada actividad deben confirmarse directamente con el establecimiento.',
+    restaurante: {
+      nombre: 'Tributo Cocina de Origen',
+      descripcion: 'Tributo Cocina de Origen es la propuesta gastronómica asociada al establecimiento. Su menú presenta preparaciones que combinan ingredientes del campo, referencias a la cocina tradicional y propuestas contemporáneas.',
+      categorias: ['Desayunos', 'Entradas', 'Platos fuertes', 'Preparaciones con carnes y trucha', 'Bebidas y otras opciones de la carta'],
+      platosTitulo: 'Preparaciones descritas en el menú',
+      platos: ['Huevos al gusto', 'Changua', 'Pancakes', 'Amasijos', 'Empanadas de calentao', 'Buñuelos de yuca', 'Ceviches', 'Carimañolas de trucha'],
+      nota: 'Los platos disponibles, los precios y los horarios de atención deben consultarse en el menú actualizado del restaurante.'
+    },
+    eventos: {
+      descripcion: 'El hotel ofrece espacios para reuniones, conferencias, talleres, networking, lanzamientos de marca y actividades de integración empresarial.',
+      columna: 'Detalle',
+      espacios: [
+        { nombre: 'Salón Alta Vista', detalle: '68 m² · hasta 70 personas en auditorio' },
+        { nombre: 'Salón Terracota', detalle: '70 m² · distintas configuraciones para reuniones' },
+        { nombre: 'Zona verde exterior', detalle: 'Aprox. 560 m²' },
+        { nombre: 'Casa Madre y lobby', detalle: 'Recepción, buffet o cócteles' },
+        { nombre: 'Deck Pasarela', detalle: 'Plataforma con vistas al embalse' },
+        { nombre: 'Torre Mirador', detalle: 'Experiencias privadas' },
+        { nombre: 'Zona de talleres', detalle: 'Actividades privadas' }
+      ],
+      alojamiento: 'Las capacidades dependen de la distribución y el montaje. Los servicios de alimentación, bebidas, equipos y alojamiento deben cotizarse según las necesidades del evento.'
+    },
+    embalseTitulo: 'Naturaleza y entorno',
+    embalse: 'La propuesta turística del establecimiento está relacionada con el descanso, los paisajes naturales y las actividades al aire libre. Las caminatas, las experiencias de huerta, las cabalgatas y los espacios exteriores permiten complementar la estancia con actividades recreativas.',
+    datosEstablecimiento: [
+      { label: 'Nombre comercial', value: 'Neusa Hills Hotel Boutique' },
+      { label: 'Razón social', value: 'VERUM & CO S.A.S.' },
+      { label: 'NIT', value: '901989333-0' },
+      { label: 'Categoría', value: 'Ecolodge' },
+      { label: 'Dirección', value: 'Vereda Parama Bajo, Finca Neusa Hills Park, Tausa, Cundinamarca' },
+      { label: 'Registro Nacional de Turismo', value: 'RNT 288622' }
+    ],
+    datosNota: 'Datos tomados del certificado de Registro Nacional de Turismo y del catálogo aportados por el establecimiento (certificado expedido el 7 de mayo de 2026, con vencimiento indicado el 31 de marzo de 2027). Verifica la vigencia en la fuente oficial.',
+    contactos: [
+      { titulo: 'Reservas', lineas: [
+        { texto: '☎ +57 310 579 1978', href: 'tel:+573105791978' },
+        { texto: '✉ reservas@neusahills.com', href: 'mailto:reservas@neusahills.com' }
+      ]},
+      { titulo: 'Contacto comercial (eventos y empresas)', lineas: [
+        { texto: 'Yvonne Andrea Martínez' },
+        { texto: '☎ +57 322 450 3640', href: 'tel:+573224503640' },
+        { texto: '✉ directorcomercial@neusahills.com', href: 'mailto:directorcomercial@neusahills.com' }
+      ]},
+      { titulo: 'Información general', lineas: [
+        { texto: '☎ +57 318 696 5983', href: 'tel:+573186965983' },
+        { texto: '🌐 neusahills.com', href: 'https://www.neusahills.com/' }
+      ]}
+    ],
+    aviso: 'La información de esta ficha se basa en los materiales comerciales y documentales suministrados por el establecimiento. Los precios, servicios, horarios y condiciones están sujetos a confirmación con el establecimiento. La información publicada en DMD tiene fines turísticos e informativos y no sustituye la confirmación directa de una reserva.',
+    enlaces: {
+      reservar: 'https://www.neusahills.com/',
+      web: 'https://www.neusahills.com/',
+      whatsapp: '',
+      telefono: '+57 310 579 1978'
     }
   }
 ];

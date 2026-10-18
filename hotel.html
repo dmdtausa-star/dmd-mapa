@@ -86,6 +86,17 @@
   .room-card .cap{ font-size:12.5px; color:#69788A; }
   .room-card .jac{ display:inline-block; margin-top:8px; font-size:11.5px; font-weight:700; color:#1F4E80; background:#EAF2FA; padding:4px 10px; border-radius:20px; }
 
+  .room-card .tipo{ font-size:11.5px; color:#00967F; font-weight:700; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px; }
+  .room-card .rdesc{ font-size:13px; color:#4A5A6A; line-height:1.6; margin-top:6px; }
+  .exp-group + .exp-group{ margin-top:14px; }
+
+  details.rates{ border:1px solid #E4E9EF; border-radius:12px; background:#F8FAFC; overflow:hidden; }
+  details.rates summary{ cursor:pointer; padding:14px 16px; font-weight:700; font-size:14px; color:#12202E; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:10px; }
+  details.rates summary::-webkit-details-marker{ display:none; }
+  details.rates summary::after{ content:'▼'; font-size:11px; color:#69788A; transition:transform 0.2s ease; }
+  details.rates[open] summary::after{ transform:rotate(180deg); }
+  details.rates .rates-body{ padding:0 16px 16px 16px; }
+
   .cap-table{ width:100%; border-collapse:collapse; font-size:13.5px; }
   .cap-table th, .cap-table td{ text-align:left; padding:10px 12px; border-bottom:1px solid #EEF1F5; }
   .cap-table th{ font-size:11px; text-transform:uppercase; letter-spacing:0.6px; color:#8A97A6; font-weight:700; }
@@ -151,34 +162,59 @@
       <h3>🛏️ Hospedaje</h3>
       <div class="badge-grid" id="roomGrid"></div>
       <p class="note-line" id="roomNote"></p>
-      <div class="sub-title">Las habitaciones incluyen</div>
-      <div class="chip-list" id="amenidades"></div>
-      <div class="price-note" style="margin-top:16px;">
-        💡 Los precios cambian según tipo de habitación, cantidad de huéspedes, día, temporada y descuentos, por eso no los mostramos aquí. Consúltalos directamente con Fuga con el botón <strong>Ver precios y reservar</strong>.
+      <div id="amenidadesWrap">
+        <div class="sub-title">Las habitaciones incluyen</div>
+        <div class="chip-list" id="amenidades"></div>
       </div>
+      <div class="price-note" id="priceNote" style="margin-top:16px;"></div>
+    </div>
+
+    <div class="section-block" id="secTarifas">
+      <h3>💲 Tarifas</h3>
+      <details class="rates" id="ratesDetails">
+        <summary id="ratesSummary">Ver tarifas publicadas</summary>
+        <div class="rates-body">
+          <table class="cap-table">
+            <thead><tr><th>Habitación</th><th id="ratesColHead">Tarifa</th></tr></thead>
+            <tbody id="ratesTabla"></tbody>
+          </table>
+          <p class="note-line" id="ratesAviso"></p>
+        </div>
+      </details>
     </div>
 
     <div class="section-block" id="secExperiencias">
       <h3>🌿 Experiencias</h3>
+      <div id="expGrupos"></div>
       <div class="chip-list" id="experiencias"></div>
       <p class="note-line" id="expNote"></p>
     </div>
 
     <div class="section-block" id="secRestaurante">
       <h3>🍽️ Restaurante</h3>
+      <div class="sub-title" id="restNombre" style="margin-top:0;"></div>
       <p class="body-text" id="restDesc"></p>
-      <div class="sub-title">Ingredientes de huerta y región</div>
-      <div class="chip-list" id="restIngredientes"></div>
-      <div class="sub-title">Algunos platos</div>
-      <div class="chip-list" id="restPlatos"></div>
+      <div id="wrapIng">
+        <div class="sub-title">Ingredientes de huerta y región</div>
+        <div class="chip-list" id="restIngredientes"></div>
+      </div>
+      <div id="wrapCat">
+        <div class="sub-title">Categorías de la carta</div>
+        <div class="chip-list" id="restCategorias"></div>
+      </div>
+      <div id="wrapPlatos">
+        <div class="sub-title" id="restPlatosTitulo">Algunos platos</div>
+        <div class="chip-list" id="restPlatos"></div>
+      </div>
       <p class="note-line" id="restHorario"></p>
+      <p class="note-line" id="restNota"></p>
     </div>
 
     <div class="section-block" id="secEventos">
       <h3>🎉 Eventos</h3>
       <p class="body-text" id="evDesc"></p>
       <table class="cap-table">
-        <thead><tr><th>Espacio</th><th>Capacidad</th></tr></thead>
+        <thead><tr><th>Espacio</th><th id="evColHead">Capacidad</th></tr></thead>
         <tbody id="evTabla"></tbody>
       </table>
       <p class="note-line" id="evAloj"></p>
@@ -194,7 +230,7 @@
     </div>
 
     <div class="section-block" id="secEmbalse">
-      <h3>🏔️ Embalse del Neusa</h3>
+      <h3 id="embalseTitulo">🏔️ Embalse del Neusa</h3>
       <p class="body-text" id="embalseTxt"></p>
     </div>
 
@@ -210,6 +246,12 @@
       <p class="note-line" id="comoLlegarTxt"></p>
     </div>
 
+    <div class="section-block" id="secDatos">
+      <h3>📋 Datos del establecimiento</h3>
+      <div class="badge-grid" id="datosGrid"></div>
+      <p class="note-line" id="datosNota"></p>
+    </div>
+
     <div class="section-block">
       <h3>Reseñas de este hotel</h3>
       <div id="reviewsContainer"></div>
@@ -218,6 +260,7 @@
     <div class="section-block">
       <h3>¿Necesitas ayuda o más información?</h3>
       <div class="badge-grid">
+        <div id="contactosExtra" style="display:contents;"></div>
         <div class="contact-card">
           <div class="name">Soporte de la página DMD</div>
           <a id="dmdTel" href="#"></a>
@@ -225,6 +268,8 @@
         </div>
       </div>
     </div>
+
+    <div class="price-note" id="avisoBox" style="margin-bottom:22px;"></div>
 
     <div class="actions">
       <button id="shareBtn" class="btn btn-outline">🔗 Compartir este hotel</button>
@@ -365,18 +410,23 @@
 
   // ---------- botones de acción (se activan solos cuando pegas el link en site-data.js) ----------
   const en = hotel.enlaces || {};
-  const q = encodeURIComponent(hotel.mapsQuery || hotel.name);
+  const hasCoords = (typeof hotel.lat === 'number' && typeof hotel.lng === 'number');
+  const q = encodeURIComponent(hasCoords ? (hotel.lat + ',' + hotel.lng) : (hotel.mapsQuery || hotel.name));
   const waDigits = (en.whatsapp || '').replace(/[^\d]/g, '');
   const ctas = [
     { icon:'🔗', label:'Ver precios y reservar', href:en.reservar, primary:true, external:true },
     { icon:'📍', label:'Cómo llegar', href:'https://www.google.com/maps/dir/?api=1&destination=' + q, external:true },
     { icon:'🌐', label:'Sitio web oficial', href:en.web, external:true },
     { icon:'📞', label:'Contactar', href: waDigits ? 'https://wa.me/' + waDigits : (en.telefono ? 'tel:' + en.telefono.replace(/[^\d+]/g,'') : ''), external:true },
-    { icon:'🛏️', label:'Ver habitaciones', href:'#secHospedaje' },
-    { icon:'🍽️', label:'Ver restaurante', href:'#secRestaurante' },
-    { icon:'🎉', label:'Eventos', href:'#secEventos' },
-    { icon:'🗺️', label:'Ver en el mapa', href:'https://www.google.com/maps/search/?api=1&query=' + q, external:true }
+    { icon:'🛏️', label:'Ver habitaciones', href:'#secHospedaje' }
   ];
+  if(hotel.tarifas) ctas.push({ icon:'💲', label:'Ver tarifas', href:'#secTarifas', opensRates:true });
+  ctas.push({ icon:'🍽️', label:'Ver restaurante', href:'#secRestaurante' });
+  ctas.push({ icon:'🎉', label:'Eventos', href:'#secEventos' });
+  // si el hotel tiene coordenadas, "Ver en el mapa" abre el mapa de DMD con su marcador; si no, busca en Google Maps
+  ctas.push(hasCoords
+    ? { icon:'🗺️', label:'Ver en el mapa', href:'mapa.html?h=' + hotel.slug }
+    : { icon:'🗺️', label:'Ver en el mapa', href:'https://www.google.com/maps/search/?api=1&query=' + q, external:true });
   const ctaGrid = $('ctaGrid');
   ctas.forEach(function(c){
     const a = document.createElement('a');
@@ -386,6 +436,7 @@
       if(c.external){ a.target = '_blank'; a.rel = 'noopener'; }
       a.innerHTML = '<span>' + c.icon + '</span><span></span>';
       a.lastChild.textContent = c.label;
+      if(c.opensRates){ a.addEventListener('click', function(){ $('ratesDetails').open = true; }); }
     } else {
       a.className += ' disabled';
       a.setAttribute('aria-disabled', 'true');
@@ -401,37 +452,78 @@
   (hotel.habitaciones || []).forEach(function(r){
     const card = document.createElement('div');
     card.className = 'room-card';
-    card.innerHTML = '<h4></h4><div class="cap"></div>';
+    card.innerHTML = '<div class="tipo"></div><h4></h4><div class="cap"></div><div class="rdesc"></div>';
+    card.querySelector('.tipo').textContent = r.tipo || '';
+    if(!r.tipo) card.querySelector('.tipo').style.display = 'none';
     card.querySelector('h4').textContent = r.nombre;
-    card.querySelector('.cap').textContent = '👥 ' + r.capacidad;
+    card.querySelector('.cap').textContent = r.capacidad ? '👥 ' + r.capacidad : '';
+    if(!r.capacidad) card.querySelector('.cap').style.display = 'none';
+    card.querySelector('.rdesc').textContent = r.descripcion || '';
+    if(!r.descripcion) card.querySelector('.rdesc').style.display = 'none';
     if(r.nota){ const j = document.createElement('span'); j.className = 'jac'; j.textContent = '🛁 ' + r.nota; card.appendChild(j); }
     roomGrid.appendChild(card);
   });
   setNote('roomNote', hotel.habitacionesNota);
   chips('amenidades', hotel.amenidadesHabitacion);
+  if(!(hotel.amenidadesHabitacion || []).length) hide('amenidadesWrap');
+  setNote('priceNote', hotel.precioNota);
   if(!(hotel.habitaciones || []).length) hide('secHospedaje');
+
+  // ---------- tarifas (sección desplegable) ----------
+  if(hotel.tarifas && (hotel.tarifas.items || []).length){
+    $('ratesSummary').textContent = '💲 ' + (hotel.tarifas.titulo || 'Ver tarifas');
+    $('ratesColHead').textContent = hotel.tarifas.columna || 'Tarifa';
+    const rt = $('ratesTabla');
+    hotel.tarifas.items.forEach(function(it){
+      const tr = document.createElement('tr');
+      tr.innerHTML = '<td></td><td></td>';
+      tr.children[0].textContent = it.habitacion; tr.children[1].textContent = it.valor;
+      rt.appendChild(tr);
+    });
+    setNote('ratesAviso', hotel.tarifas.aviso ? '⚠️ ' + hotel.tarifas.aviso : '');
+  } else hide('secTarifas');
 
   // ---------- experiencias ----------
   chips('experiencias', hotel.experiencias, 'green');
+  (hotel.experienciasGrupos || []).forEach(function(g){
+    const wrap = document.createElement('div');
+    wrap.className = 'exp-group';
+    wrap.innerHTML = '<div class="sub-title" style="margin-top:0;"></div><div class="chip-list"></div>';
+    wrap.querySelector('.sub-title').textContent = g.titulo;
+    const list = wrap.querySelector('.chip-list');
+    (g.items || []).forEach(function(t){
+      const s = document.createElement('span'); s.className = 'chip green'; s.textContent = t; list.appendChild(s);
+    });
+    $('expGrupos').appendChild(wrap);
+  });
   setNote('expNote', hotel.experienciasNota);
-  if(!(hotel.experiencias || []).length) hide('secExperiencias');
+  if(!(hotel.experiencias || []).length && !(hotel.experienciasGrupos || []).length) hide('secExperiencias');
 
   // ---------- restaurante ----------
   if(hotel.restaurante){
-    $('restDesc').textContent = hotel.restaurante.descripcion || '';
-    chips('restIngredientes', hotel.restaurante.ingredientes, 'warm');
-    chips('restPlatos', hotel.restaurante.platos);
-    setNote('restHorario', hotel.restaurante.horario ? '🕗 ' + hotel.restaurante.horario : '');
+    const R = hotel.restaurante;
+    if(R.nombre) $('restNombre').textContent = R.nombre; else hide('restNombre');
+    $('restDesc').textContent = R.descripcion || '';
+    chips('restIngredientes', R.ingredientes, 'warm');
+    if(!(R.ingredientes || []).length) hide('wrapIng');
+    chips('restCategorias', R.categorias, 'warm');
+    if(!(R.categorias || []).length) hide('wrapCat');
+    chips('restPlatos', R.platos);
+    if(!(R.platos || []).length) hide('wrapPlatos');
+    if(R.platosTitulo) $('restPlatosTitulo').textContent = R.platosTitulo;
+    setNote('restHorario', R.horario ? '🕗 ' + R.horario : '');
+    setNote('restNota', R.nota);
   } else hide('secRestaurante');
 
   // ---------- eventos ----------
   if(hotel.eventos){
     $('evDesc').textContent = hotel.eventos.descripcion || '';
+    if(hotel.eventos.columna) $('evColHead').textContent = hotel.eventos.columna;
     const tb = $('evTabla');
     (hotel.eventos.espacios || []).forEach(function(e){
       const tr = document.createElement('tr');
       tr.innerHTML = '<td></td><td></td>';
-      tr.children[0].textContent = e.nombre; tr.children[1].textContent = e.capacidad;
+      tr.children[0].textContent = e.nombre; tr.children[1].textContent = e.capacidad || e.detalle || '';
       tb.appendChild(tr);
     });
     setNote('evAloj', hotel.eventos.alojamiento);
@@ -440,6 +532,7 @@
   // ---------- sostenibilidad / embalse ----------
   chips('sostenibilidad', hotel.sostenibilidad, 'green');
   if(!(hotel.sostenibilidad || []).length) hide('secSostenibilidad');
+  if(hotel.embalseTitulo) $('embalseTitulo').textContent = '🏔️ ' + hotel.embalseTitulo;
   if(hotel.embalse) $('embalseTxt').textContent = hotel.embalse; else hide('secEmbalse');
 
   // ---------- pet friendly ----------
@@ -468,6 +561,46 @@
     });
   } else hide('secInfo');
   setNote('comoLlegarTxt', hotel.comoLlegar ? '🚗 ' + hotel.comoLlegar : '');
+
+  // ---------- datos del establecimiento ----------
+  if((hotel.datosEstablecimiento || []).length){
+    const dg = $('datosGrid');
+    hotel.datosEstablecimiento.forEach(function(d){
+      const card = document.createElement('div');
+      card.className = 'badge-card';
+      card.innerHTML = '<div class="label"></div><div class="value"></div>';
+      card.querySelector('.label').textContent = d.label;
+      card.querySelector('.value').textContent = d.value;
+      dg.appendChild(card);
+    });
+    setNote('datosNota', hotel.datosNota);
+  } else hide('secDatos');
+
+  // ---------- contactos propios del hotel ----------
+  (hotel.contactos || []).forEach(function(ct){
+    const card = document.createElement('div');
+    card.className = 'contact-card';
+    const nm = document.createElement('div');
+    nm.className = 'name'; nm.textContent = ct.titulo;
+    card.appendChild(nm);
+    (ct.lineas || []).forEach(function(l){
+      if(l.href){
+        const a = document.createElement('a');
+        a.href = l.href; a.textContent = l.texto;
+        if(l.href.indexOf('http') === 0){ a.target = '_blank'; a.rel = 'noopener'; }
+        card.appendChild(a);
+      } else {
+        const d = document.createElement('div');
+        d.style.cssText = 'font-size:13px;color:#25313E;margin-top:2px;';
+        d.textContent = l.texto;
+        card.appendChild(d);
+      }
+    });
+    $('contactosExtra').appendChild(card);
+  });
+
+  // ---------- aviso para los visitantes ----------
+  if(hotel.aviso) $('avisoBox').textContent = 'ℹ️ ' + hotel.aviso; else hide('avisoBox');
 
   // ---------- contacto DMD ----------
   const dmdTel = $('dmdTel');
