@@ -197,9 +197,12 @@ const PLACES = [
     }
   },
   {
-    name: 'Posos de sal',
+    name: 'Pozos de sal',
+    // el link anterior (con "s") sigue funcionando para no romper enlaces ya compartidos
+    slugsAnteriores: ['posos-de-sal'],
     desc: 'Manantiales de agua salina de valor histórico.',
     lat: 5.195242, lng: -73.897772,
+    // (la carpeta de fotos se sigue llamando "posos-de-sal"; si algún día la renombras a "pozos-de-sal", cambia también estas rutas)
     photos: ['fotos/posos-de-sal/foto1.jpg', 'fotos/posos-de-sal/foto2.jpg', 'fotos/posos-de-sal/foto3.jpg', 'fotos/posos-de-sal/foto4.jpg', 'fotos/posos-de-sal/foto5.jpg', 'fotos/posos-de-sal/foto6.jpg'],
     fotosCredito: 'Marlon Poveda',
     video: '',
@@ -233,7 +236,9 @@ function slugify(text){
 PLACES.forEach(function(p){ p.slug = slugify(p.name); });
 
 function getPlaceBySlug(slug){
-  return PLACES.find(function(p){ return p.slug === slug; });
+  return PLACES.find(function(p){
+    return p.slug === slug || (p.slugsAnteriores && p.slugsAnteriores.indexOf(slug) !== -1);
+  });
 }
 
 // ---------- HOTELES ----------
@@ -307,11 +312,19 @@ const HOTELS = [
       mascotas: 'Sí (ver política Pet Friendly)',
       altitud: 'Aproximadamente 3.000 msnm'
     },
+    contactos: [
+      { titulo: 'Contacto del hotel', lineas: [
+        { texto: '☎ +57 322 450 3640', href: 'tel:+573224503640' },
+        { texto: '🌐 neusahills.com', href: 'https://www.neusahills.com/' },
+        { texto: '📸 Instagram · @neusahills', href: 'https://www.instagram.com/neusahills/' },
+        { texto: '📘 Facebook · neusahills.glamping', href: 'https://www.facebook.com/neusahills.glamping' }
+      ]}
+    ],
     enlaces: {
       reservar: '',
-      web: '',
+      web: 'https://www.neusahills.com/',
       whatsapp: '',
-      telefono: ''
+      telefono: '+57 322 450 3640'
     }
   },
   {

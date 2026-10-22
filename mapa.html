@@ -545,7 +545,7 @@
     const place = getPlaceBySlug(slug);
     if(!place) return;
     const marker = placeMarkers[PLACES.indexOf(place)];
-    selectDestination(place.lat, place.lng, place.name, marker, slug);
+    selectDestination(place.lat, place.lng, place.name, marker, place.slug);
     map.closePopup();
   };
 
